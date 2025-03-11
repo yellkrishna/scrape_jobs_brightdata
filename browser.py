@@ -15,10 +15,10 @@ def connect_to_chrome_server(server_addr):
     """
     Establish a connection to the remote Chrome server and return a WebDriver instance.
     """
-    print('Connecting to Browser...')
+    logger.info('Connecting to Browser...')
     connection = Connection(server_addr, 'goog', 'chrome')
     driver = Remote(connection, options=Options())
-    print('Connected!')
+    logger.info('Connected to Chrome browser')
     return driver
 
 def wait_for_page_load(driver, timeout=20):
@@ -38,6 +38,8 @@ def load_page(driver, url):
     """
     Load a page using driver.get and wait for it to load completely.
     """
-    print(f'Navigating to {url}...')
+    logger.info(f'Navigating to {url}...')
     driver.get(url)
+    logger.debug(f'Waiting for page to load: {url}')
     wait_for_page_load(driver, timeout=20)
+    logger.debug(f'Page loaded successfully: {url}')

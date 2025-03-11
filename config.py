@@ -2,15 +2,54 @@
 import os
 import time
 import socket
+import logging
+import logging.handlers
 from requests.exceptions import RequestException
 from selenium.common.exceptions import TimeoutException
 from functools import wraps
-import logging
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# logging
+# Configure logging
+def setup_logging(log_file='crawler.log', console_level=logging.INFO, file_level=logging.DEBUG):
+    """
+    Set up logging configuration with both console and file handlers.
+    
+    Args:
+        log_file: Path to the log file
+        console_level: Logging level for console output
+        file_level: Logging level for file output
+    """
+    # Create root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.DEBUG)  # Capture all logs at the root level
+    
+    # Clear any existing handlers
+    if root_logger.handlers:
+        root_logger.handlers.clear()
+    
+    # Create formatters
+    console_formatter = logging.Formatter('%(levelname)s: %(message)s')
+    file_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    
+    # Console handler
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(console_level)
+    console_handler.setFormatter(console_formatter)
+    root_logger.addHandler(console_handler)
+    
+    # File handler with rotation
+    file_handler = logging.handlers.RotatingFileHandler(
+        log_file, maxBytes=10*1024*1024, backupCount=5, encoding='utf-8'
+    )
+    file_handler.setLevel(file_level)
+    file_handler.setFormatter(file_formatter)
+    root_logger.addHandler(file_handler)
+    
+    return root_logger
+
+# Initialize logging
 logger = logging.getLogger(__name__)
 
 # API configuration
