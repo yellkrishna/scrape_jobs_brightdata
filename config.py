@@ -20,6 +20,11 @@ API_CONFIG = {
     "openai_temperature": 0,
 }
 
+# Bright Data configuration
+BRIGHT_DATA_CONFIG = {
+    "server_addr": os.getenv("BRIGHT_DATA_SERVER_ADDR", 'https://brd-customer-hl_cf240944-zone-scrape_job_postings:si9klwfh7f28@brd.superproxy.io:9515')
+}
+
 # decorators
 def retry_with_backoff(max_tries=3, backoff_factor=2):
     """
